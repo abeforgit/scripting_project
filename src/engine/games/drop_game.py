@@ -2,25 +2,30 @@ from typing import List, Dict, Tuple
 from ..util.grid import Grid
 import random
 import copy
+from . import game
 
 COLORS: List[str] = ["RED", "GREEN", "BLUE", "YELLOW", "ORANGE"]
 DIRS: List[Tuple[int, int]] = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
 
-class DropGame:
+class DropGame(game.Game):
 
-    def __init__(self, state: List[List], colors: List):
-        self._grid = copy.deepcopy(state)
-        self._colors = colors
+    @staticmethod
+    def get_initial_state(params: Dict) -> List[List]:
 
-    def get_randomized_grid(self) -> List[List]:
+        rows: int = params["rows"]
+        cols: int = params.get("cols", None)
+        colors: List[str] = params["colors"]
+
+        if not cols:
+            cols = rows
+
         r = random.Random()
+        return [[ r.choice(colors) for _ in range(cols)] for _ in range(rows)]
 
-        for i, row in enumerate(self._grid):
-            for j, _ in enumerate(row):
-                self._grid[i][j] = r.choice(self._colors)
-
-        return self._grid
+    def __init__(self, state: Dict):
+        super().__init__()
+        self._grid = copy.deepcopy(state["grid"])
 
     def get_grid(self) -> List[List]:
         return self._grid
@@ -28,7 +33,8 @@ class DropGame:
     def get_droptile(self) -> str:
         return self._grid[0][0]
 
-    def do_move(self, move_val: str) -> Dict:
+    def do_move(self, move_dict: Dict) -> Dict:
+        move_val = move_dict["move"]
         self.drop(self.get_droptile(), move_val, (0, 0))
 
         response: Dict = {
