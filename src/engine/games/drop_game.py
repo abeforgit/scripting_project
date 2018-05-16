@@ -38,7 +38,7 @@ class DropGame(game.Game):
         self.drop(self.get_droptile(), move_val, (0, 0))
 
         response: Dict = {
-            "state": self._grid,
+            "grid": self._grid,
             "msg": None
         }
 
