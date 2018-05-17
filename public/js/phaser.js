@@ -4,6 +4,7 @@ function mygame() {
     let graphics;
     let beams;
     let clock;
+    let spiders;
     const PLAYERSPEED = 200;
     const WIDTH = 800;
     const HEIGHT = 600;
@@ -35,12 +36,12 @@ function mygame() {
         this.load.image('star', './assets/star.png');
         this.load.image('player', './assets/player.png');
         this.load.image('beam', './assets/beam.gif');
+        this.load.image('spooder', './assets/spooder.png')
     }
 
     function create() {
         this.add.image(400, 300, 'sky');
-        graphics = this.add.graphics({x: 0, y: 0});
-        beams = this.physics.add.staticGroup();
+        beams = this.physics.add.group();
 
         player = this.physics.add.sprite(100, 450, 'player');
         player = playerConfig(player);
@@ -51,10 +52,31 @@ function mygame() {
         }, this);
 
 
-        this.input.on("pointerdown", shoot, this);
+        this.input.on("pointerdown", shoot.bind(this), this);
 
         cursors = this.input.keyboard.createCursorKeys();
 
+        //spiders
+
+        spiders = this.physics.add.group();
+
+        spiders.create(100, 100, 'spooder');
+        this.physics.add.overlap(spiders, beams, destroy, null, this);
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+    function destroy(spider, beam) {
+        spider.destroy();
 
     }
 
@@ -98,15 +120,15 @@ function mygame() {
 
     function shoot(pointer) {
 
-        let beam = beams.create(player.x, player.y, 'beam');
+        let beam = this.physics.add.sprite(player.x, player.y, 'beam');
+        beams.add(beam);
         beam.setOrigin(0, 0.5);
-        beam.scaleX = 3;
+        beam.setScale(3, 1);
         let angle = Math.atan2(pointer.y - player.y, pointer.x - player.x) * 180 / Math.PI;
-        beam.angle = angle;
+        beam.setAngle(angle);
         let timedEvent = this.time.delayedCall(20, () => {
             beam.destroy();
         }, [], this);
-2
 
     }
 }
