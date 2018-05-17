@@ -54,7 +54,8 @@ class DropGame(game.Game):
                 if self._grid[next_pos[0]][next_pos[1]] == color:
                     self.drop(color, new_color, next_pos)
 
-    def has_won(self, color) -> bool:
+    def has_won(self) -> bool:
+        color = self.get_droptile()
         for row in self._grid:
             for cell in row:
                 if cell != color:

@@ -13,7 +13,7 @@ const gamegrid = (rows, cols, grid, targetElementId) => {
         let colind = 1;
         for (let cell of row) {
             $("#" + targetElementId).append(
-                '<div id="'  + rowind + '_' + colind + '" class="game-cell" style="grid-row: ' + rowind + '; background-color: ' + cell + '; grid-column: ' + colind + ' "/>'
+                `<div id = "${rowind}_${colind}" class="game-cell" style="grid-row: ${rowind}; grid-column: ${colind}; background-color: ${cell}"/>`
             );
             colind += 1;
         }

@@ -15,21 +15,27 @@ let STATE;
 
 const get_new_state = (data) => {
 
+    let rslt = {};
+
 
     fetch('../cgi-bin/runner.py?data=' + JSON.stringify(data))
         .then(response => response.json())
         .then(function (s) {
-            console.log(s["grid"]);
-            let rows = parseInt(s["rows"]);
+            rslt = s;
+            let rows = parseInt(rslt["rows"]);
             let cols;
-            if (!s["cols"] === "None") {
+            if (!(rslt["cols"] === "None")) {
                 cols = rows
             } else {
-                cols = s["cols"]
+                cols = rslt["cols"]
             }
-            STATE = s["grid"].slice();
-            gamegrid(rows, cols, s["grid"], "gamegrid");
+            STATE = rslt["grid"].slice();
+            gamegrid(rows, cols, STATE, "gamegrid");
+            if (rslt["msg"] === "WON") {
+                alert("Congratulations!");
+            }
         });
+
 
 };
 

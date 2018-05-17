@@ -28,7 +28,15 @@ def new_game(game_name, params):
 def move(game_name, statedict: Dict, move_dict: Dict) -> Dict:
 
     mygame: game.Game = GAMELIB[game_name](statedict)
-    return mygame.do_move(move_dict)
+    if move_dict["move"] == mygame.get_grid()[0][0]:
+        return {"grid": mygame.get_grid()}
+
+    rslt = mygame.do_move(move_dict)
+
+    if mygame.has_won():
+        rslt["msg"] = "WON"
+
+    return rslt
 
 
 opts = json.loads(cgi.FieldStorage().getvalue("data"))
@@ -53,6 +61,6 @@ elif request_type == "MOVE":
 
     print("Content-Type: application/json")
     print()
-    print(json.dumps({"grid": rslt["grid"], "rows": len(rslt["grid"]), "cols": len(rslt["grid"][0])}))
+    print(json.dumps({"grid": rslt["grid"], "rows": len(rslt["grid"]), "cols": len(rslt["grid"][0]), "msg": rslt["msg"]}))
 else:
     pass

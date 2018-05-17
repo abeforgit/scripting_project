@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 
 class Game:
@@ -8,6 +8,9 @@ class Game:
         pass
 
     def do_move(self, move_dict):
+        pass
+
+    def get_grid(self) -> List[List]:
         pass
 
     def __init__(self):
