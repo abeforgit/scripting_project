@@ -1,8 +1,16 @@
 function mygame() {
+    let player;
+    let cursors;
+    let graphics;
+    let beams;
+    let clock;
+    const PLAYERSPEED = 200;
+    const WIDTH = 800;
+    const HEIGHT = 600;
     let config = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: WIDTH,
+        height: HEIGHT,
         scene: {
             preload: preload,
             create: create,
@@ -18,38 +26,87 @@ function mygame() {
     };
 
     let game = new Phaser.Game(config);
-    let player;
 
 
     function preload() {
         this.load.image('sky', './assets/sky.png');
-        this.load.image('ground', './assets/platform.png');
+        this.load.image('laser', './assets/platform.png');
         this.load.image('bomb', './assets/bomb.png');
         this.load.image('star', './assets/star.png');
-        this.load.image('player', './assets/player.png')
+        this.load.image('player', './assets/player.png');
+        this.load.image('beam', './assets/beam.gif');
     }
 
     function create() {
         this.add.image(400, 300, 'sky');
+        graphics = this.add.graphics({x: 0, y: 0});
+        beams = this.physics.add.staticGroup();
 
         player = this.physics.add.sprite(100, 450, 'player');
         player = playerConfig(player);
 
         this.input.on("pointermove", function (pointer) {
             let angle = Math.atan2(pointer.y - player.y, pointer.x - player.x) * 180 / Math.PI;
-            console.log(angle);
             player.angle = angle + 90;
         }, this);
+
+
+        this.input.on("pointerdown", shoot, this);
+
+        cursors = this.input.keyboard.createCursorKeys();
 
 
     }
 
     function update() {
+        keyboardPoll();
+
+
     }
 
     function render() {
 
-        game.debug.spriteInfo(sprite, 32, 32);
+
+    }
+
+
+    function keyboardPoll() {
+
+        if (cursors.left.isDown) {
+            player.setVelocityY(0);
+            player.setVelocityX(-PLAYERSPEED);
+        }
+        else if (cursors.right.isDown) {
+            player.setVelocityY(0);
+            player.setVelocityX(PLAYERSPEED);
+
+        } else if (cursors.up.isDown) {
+            player.setVelocityX(0);
+            player.setVelocityY(-PLAYERSPEED);
+
+        } else if (cursors.down.isDown) {
+            player.setVelocityX(0);
+            player.setVelocityY(PLAYERSPEED);
+
+        } else {
+            player.setVelocityX(0);
+            player.setVelocityY(0);
+        }
+
+
+    }
+
+    function shoot(pointer) {
+
+        let beam = beams.create(player.x, player.y, 'beam');
+        beam.setOrigin(0, 0.5);
+        beam.scaleX = 3;
+        let angle = Math.atan2(pointer.y - player.y, pointer.x - player.x) * 180 / Math.PI;
+        beam.angle = angle;
+        let timedEvent = this.time.delayedCall(20, () => {
+            beam.destroy();
+        }, [], this);
+2
 
     }
 }
