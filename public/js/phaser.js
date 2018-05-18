@@ -81,6 +81,9 @@ function mygame() {
 
     function gameOver() {
         let name = prompt("Game over!\n" + "Your score: " + score, "Enter your name");
+        if (name !== null) {
+            save_score(name, score, "phaser");
+        }
         reset(this);
     }
 
@@ -98,10 +101,7 @@ function mygame() {
     }
 
     function reset(scene) {
-        spiderGroup.getChildren().forEach((spider) => destroy(spider));
-        player.setPosition(150, 150);
-        score = 0;
-        scoreText.setText('Score: ' + score);
+        location.reload()
     }
 
 

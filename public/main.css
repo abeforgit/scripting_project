@@ -1,0 +1,7 @@
+#score-div {
+    display: flex;
+    flex-direction: row;
+}
+.score-column {
+    padding: 20px 20px 20px 0;
+}

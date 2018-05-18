@@ -21,11 +21,13 @@ class DropGame(game.Game):
             cols = rows
 
         r = random.Random()
-        return [[ r.choice(colors) for _ in range(cols)] for _ in range(rows)]
+        return [[r.choice(colors) for _ in range(cols)] for _ in range(rows)]
 
     def __init__(self, state: Dict):
         super().__init__()
         self._grid = copy.deepcopy(state["grid"])
+        self.score = 0
+        self.has_scored = False
 
     def get_grid(self) -> List[List]:
         return self._grid
@@ -34,12 +36,14 @@ class DropGame(game.Game):
         return self._grid[0][0]
 
     def do_move(self, move_dict: Dict) -> Dict:
+        self.score = move_dict["score"]
         move_val = move_dict["move"]
         self.drop(self.get_droptile(), move_val, (0, 0))
 
         response: Dict = {
             "grid": self._grid,
-            "msg": None
+            "msg": None,
+            "score": self.score
         }
 
         return response
@@ -52,6 +56,10 @@ class DropGame(game.Game):
             next_pos = (cur_pos[0] + direction[0], cur_pos[1] + direction[1])
             if 0 <= next_pos[0] < len(self._grid) and 0 <= next_pos[1] < len(self._grid[0]):
                 if self._grid[next_pos[0]][next_pos[1]] == color:
+                    if not self.has_scored:
+                        self.has_scored = True
+                        self.score += 1
+
                     self.drop(color, new_color, next_pos)
 
     def has_won(self) -> bool:

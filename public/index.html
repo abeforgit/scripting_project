@@ -4,12 +4,37 @@
     <meta charset="UTF-8">
     <title>Project Scriptingtalen</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="js/fetcher.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css"/>
 
 </head>
 <body>
 
-<a href="dropgame.html">Drops</a>
-<a href="phaser.html">Phaser</a>
+<a href="dropgame.html" class="card">Drops</a>
+<a href="phaser.html" class="card">Phaser</a>
+<div id="score-container">
+    <h1>HIGHSCORES</h1>
+    <div id="score-div">
+        <div class="score-column">
+            <h2>Drops</h2>
+            <div id="drop_scores" class="container">
+
+            </div>
+
+        </div>
+        <div class="score-column">
+            <h2>Phaser</h2>
+            <div id="phaser_scores" class="container">
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    get_highscores();
+</script>
 
 </body>
 </html>

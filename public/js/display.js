@@ -1,8 +1,9 @@
-const gamegrid = (rows, cols, grid, targetElementId) => {
+const gamegrid = (rows, cols, grid,score, targetElementId) => {
 
     let rowtemplate = '';
     let coltemplate = '';
     let rowind = 1;
+    $('#' + targetElementId).html('');
 
     for (let i = 0; i < cols; i+=1) {
         coltemplate += 'auto ';
@@ -22,6 +23,7 @@ const gamegrid = (rows, cols, grid, targetElementId) => {
 
     $('#' + targetElementId).css('grid-template-rows', rowtemplate).css('grid-template-columns', coltemplate);
 
-    $('.game-cell').click((event) => do_move(event.target.style.gridRow.match(/[0-9]*/)[0], event.target.style.gridColumn.match(/[0-9]*/)[0]));
+    $('.game-cell').click((event) => do_move(event.target.style.gridRow.match(/[0-9]*/)[0], event.target.style.gridColumn.match(/[0-9]*/)[0], score));
+    $('#scorediv').html(`<div>${score}</div>`)
 
 };

@@ -1,15 +1,4 @@
-let data = {
-    type: "NEW_GAME",
-    params: {
-        rows: 5,
-        colors: [
-            "red",
-            "green",
-            "yellow",
-            "blue"
-        ]
-    }
-};
+
 
 let STATE;
 
@@ -30,16 +19,22 @@ const get_new_state = (data) => {
                 cols = rslt["cols"]
             }
             STATE = rslt["grid"].slice();
-            gamegrid(rows, cols, STATE, "gamegrid");
+            let score = rslt["score"];
+            gamegrid(rows, cols, STATE, score, "gamegrid");
             if (rslt["msg"] === "WON") {
-                alert("Congratulations!");
+                let name = prompt("Congratulations!", "Enter your name");
+                if (name !== null) {
+                    save_score(name, score, "dropgame");
+                }
+
+
             }
         });
 
 
 };
 
-const do_move = (row, col) => {
+const do_move = (row, col, score) => {
 
 
     let color = $('#colorselection').find(":selected").text();
@@ -52,7 +47,8 @@ const do_move = (row, col) => {
         move_data: {
             move: color,
             row: parseInt(row),
-            col: parseInt(col)
+            col: parseInt(col),
+            score: score
         }
     };
 
@@ -60,3 +56,41 @@ const do_move = (row, col) => {
     get_new_state(movedata)
 
 };
+
+const save_score = (playername, score, gamename) => {
+    let scoredata = {
+        game: gamename,
+        type: "SCORE",
+        score: score,
+        playername: playername
+    };
+
+    fetch('../cgi-bin/runner.py?data=' + JSON.stringify(scoredata)).then(() => {
+        alert("Scores saved!")
+    })
+
+};
+
+const get_highscores = () => {
+    let data = {
+        type: "GET_SCORE"
+    };
+    fetch('../cgi-bin/runner.py?data=' + JSON.stringify(data))
+        .then((response => response.json()))
+        .then((s) => {
+            $('#drop_scores').html('');
+            $('#phaser_scores').html('');
+            s.dropgame.forEach(
+                (item) => {
+                    console.log(Object.keys(item));
+
+                    $('#drop_scores').append(`<div class="row"><span class="col-sm">${Object.keys(item)[0]}</span><span class="col-sm">${Object.values(item)[0]}</span></div>`)
+                }
+            );
+            s.phaser.forEach(
+                (item) => {
+                    $('#phaser_scores').append(`<div class="row"><span class="col-sm">${Object.keys(item)}</span><span class="col-sm">${Object.values(item)[0]}</span></div>`)
+                }
+            );
+        })
+}

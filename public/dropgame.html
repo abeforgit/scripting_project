@@ -19,7 +19,25 @@
         <option>blue</option>
         <option>yellow</option>
     </select>
+    <input title="Gridsize" id="size-input" type="range" step="1" min="3" max="15">
+    <button onclick="get_new_state({
+    type: 'NEW_GAME',
+    params: {
+        rows: parseInt($('#size-input').val()),
+        colors: [
+            'red',
+            'green',
+            'yellow',
+            'blue'
+        ]
+    }
+    })" class="btn btn-primary">New Game
+    </button>
     <div class="card-body" id="gamegrid">
+
+    </div>
+
+    <div id="scorediv">
 
     </div>
 
