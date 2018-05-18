@@ -5,8 +5,11 @@ function Player(scene, x, y) {
     let player = scene.physics.add.sprite(x, y, 'player');
     player.setOrigin(0.5, 0.6);
     player.setCollideWorldBounds(true);
+    player.setScale(0.7, 0.7);
+    player.setSize(50, 50, false);
+    player.setOffset(0, 50);
     registerMovement();
-    registerMouseLook()
+    registerMouseLook();
 
     return player;
 
@@ -28,7 +31,6 @@ function Player(scene, x, y) {
 
         // Enables movement of player with WASD keys
         scene.input.keyboard.on('keydown_W', function (event) {
-
             player.setVelocityY(-PLAYERSPEED);
         });
         scene.input.keyboard.on('keydown_S', function (event) {

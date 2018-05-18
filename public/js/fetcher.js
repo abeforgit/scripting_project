@@ -60,6 +60,3 @@ const do_move = (row, col) => {
     get_new_state(movedata)
 
 };
-
-
-$(get_new_state(data));
