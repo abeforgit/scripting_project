@@ -5,7 +5,6 @@ function mygame() {
     let beams;
     let spider;
     let spiders = [];
-    const PLAYERSPEED = 200;
     const WIDTH = 800;
     const HEIGHT = 600;
     let config = {
@@ -41,32 +40,17 @@ function mygame() {
         this.add.image(400, 300, 'sky');
         beams = this.physics.add.staticGroup();
 
-        player = this.physics.add.sprite(100, 450, 'player');
-        player.setOrigin(0.5, 0.6);
-
-        this.input.on("pointermove", function (pointer) {
-            let angle = Math.atan2(pointer.y - player.y, pointer.x - player.x) * 180 / Math.PI;
-            player.angle = angle + 90;
-        }, this);
-
+        player = new Player(this, 100, 250);
 
         this.input.on("pointerdown", shoot.bind(this), this);
 
-        cursors = this.input.keyboard.createCursorKeys();
-
         // spiders
 
-        spider = this.physics.add.sprite(100, 100, 'spooder');
-        let spider2 = this.physics.add.sprite(200, 100, 'spooder');
-        let spider3 = this.physics.add.sprite(100, 200, 'spooder');
-        let spider4 = this.physics.add.sprite(600, 100, 'spooder');
-        let spider5 = this.physics.add.sprite(600, 400, 'spooder');
+        spider = new Spider(this, 100, 100);
+
 
         spiders.push(spider);
-        spiders.push(spider2);
-        spiders.push(spider3);
-        spiders.push(spider4);
-        spiders.push(spider5);
+
 
         graphics = this.add.graphics();
     }
@@ -77,30 +61,9 @@ function mygame() {
     }
 
     function update() {
-        keyboardPoll();
     }
 
-    function keyboardPoll() {
 
-        if (cursors.left.isDown) {
-            player.setVelocityX(-PLAYERSPEED);
-        }
-        else if (cursors.right.isDown) {
-            player.setVelocityX(PLAYERSPEED);
-        }
-        else {
-            player.setVelocityX(0);
-        }
-        if (cursors.up.isDown) {
-            player.setVelocityY(-PLAYERSPEED);
-        }
-        else if (cursors.down.isDown) {
-            player.setVelocityY(PLAYERSPEED);
-        }
-        else {
-            player.setVelocityY(0);
-        }
-    }
 
     function shoot(pointer) {
 
